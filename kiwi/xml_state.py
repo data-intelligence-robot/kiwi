@@ -503,10 +503,8 @@ class XMLState:
         bootstrap_packages_sections = self.get_bootstrap_packages_sections()
         if bootstrap_packages_sections:
             for bootstrap_packages_section in bootstrap_packages_sections:
-                archive_list = bootstrap_packages_section.get_archive()
-                if archive_list:
-                    for archive in archive_list:
-                        result.append(archive.get_name().strip())
+                for archive in bootstrap_packages_section.get_archive():
+                    result.append(archive.get_name().strip())
         return sorted(result)
 
     def get_system_archives(self) -> List:
@@ -2109,6 +2107,37 @@ class XMLState:
         Return preserved UUID
         """
         return self.root_filesystem_uuid
+
+    def get_bootstrap_archives_target_dirs(self) -> Dict:
+        """
+        Dict of archive names and target dirs from the type="bootstrap"
+        packages section(s)
+        :return: archive names and its target dir
+        :rtype: dict
+        """
+        result = {}
+        bootstrap_packages_sections = self.get_bootstrap_packages_sections()
+        if bootstrap_packages_sections:
+            for bootstrap_packages_section in bootstrap_packages_sections:
+                for archive in bootstrap_packages_section.get_archive():
+                    result[archive.get_name().strip()] = archive.get_target_dir()
+        return result
+
+    def get_system_archives_target_dirs(self) -> Dict:
+        """
+        Dict of archive names and its target dir from the packages sections matching
+        type="image" and type=build_type
+        :return: archive names and its target dir
+        :rtype: dict
+        """
+        result = {}
+        image_packages_sections = self.get_packages_sections(
+            ['image', self.get_build_type_name()]
+        )
+        for packages in image_packages_sections:
+            for archive in packages.get_archive():
+                result[archive.get_name().strip()] = archive.get_target_dir()
+        return result
 
     def _used_profiles(self, profiles=None):
         """

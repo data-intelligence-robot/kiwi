@@ -34,7 +34,7 @@ class TestSystemPrepare:
         Defaults.set_platform_name('x86_64')
         mock_get_logfile.return_value = None
         description = XMLDescription(
-            description='../data/example_config.xml',
+            description='../data/example_config_target_dir.xml',
             derived_from='derived/description'
         )
         self.description_dir = os.path.dirname(description.description_origin)
@@ -299,7 +299,7 @@ class TestSystemPrepare:
         mock_tar.assert_called_once_with(
             '{0}/bootstrap.tgz'.format(self.description_dir)
         )
-        tar.extract.assert_called_once_with('root_dir')
+        tar.extract.assert_called_once_with('root_dir/foo')
         self.manager.post_process_install_requests_bootstrap.assert_called_once_with(
             self.system.root_bind
         )

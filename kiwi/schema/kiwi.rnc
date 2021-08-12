@@ -106,6 +106,10 @@ k.bootinclude.attribute =
     ## specified in the system image description to become
     ## part of the boot image also
     attribute bootinclude { xsd:boolean }
+k.target_dir.attribute =
+    ## Indicates that this package has a tarball
+    ## that should be placed in that directory
+    attribute target_dir {text}
 k.bootdelete.attribute =
     ## Indicates that this package should be removed from
     ## the boot image (initrd). the attribute is only
@@ -187,9 +191,11 @@ div {
 div {
     k.archive.name.attribute = k.name.attribute
     k.archive.bootinclude.attribute = k.bootinclude.attribute
+    k.archive.target_dir.attribute = k.target_dir.attribute
     k.archive.attlist =
         k.archive.name.attribute &
-        k.archive.bootinclude.attribute?
+        k.archive.bootinclude.attribute? &
+	k.archive.target_dir.attribute?
     k.archive =
         ## Name of an image archive file (tarball)
         element archive {
